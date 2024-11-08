@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 import streamlit as st
 import pandas as pd
 import random
@@ -82,10 +76,16 @@ pitcher_name = pitcher['player_name']
 actual_speed = pitcher['release_speed']
 headshot_url = pitcher['headshot_url']
 
+# Determine the headshot folder based on player name
+if pitcher_name >= "Luis Frias":
+    headshot_path = os.path.join("headshots2", headshot_url)
+else:
+    headshot_path = os.path.join("headshots", headshot_url)
+
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
-if os.path.exists(headshot_url) and headshot_url != 'Not Found':
-    st.image(headshot_url, width=200)
+if os.path.exists(headshot_path) and headshot_url != 'Not Found':
+    st.image(headshot_path, width=200)
 else:
     st.write(f"No headshot found for {pitcher_name}.")
 
@@ -132,4 +132,3 @@ if st.session_state.feedback_statements:
     st.subheader("Feedback So Far:")
     for statement in st.session_state.feedback_statements:
         st.write(statement)
-
