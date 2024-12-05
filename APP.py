@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import random
-import os
 
 # Function to calculate points based on guess accuracy
 def calculate_points(guess, actual):
@@ -76,15 +75,15 @@ pitcher_name = pitcher['player_name']
 actual_speed = pitcher['release_speed']
 headshot_url = pitcher['headshot_url']
 
-# Determine the headshot folder based on player name
-if pitcher_name >= "Luis Frias":
-    headshot_path = os.path.join("headshots2", headshot_url)
-else:
-    headshot_path = os.path.join("headshots", headshot_url)
+# Define GitHub raw base URL
+base_url = "https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/"
+
+# Construct the raw headshot URL
+headshot_path = f"{base_url}{headshot_url}"
 
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
-if os.path.exists(headshot_path) and headshot_url != 'Not Found':
+if headshot_url != 'Not Found':  # Ensure the URL exists
     st.image(headshot_path, width=200)
 else:
     st.write(f"No headshot found for {pitcher_name}.")
