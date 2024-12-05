@@ -75,18 +75,16 @@ pitcher_name = pitcher['player_name']
 actual_speed = pitcher['release_speed']
 headshot_url = pitcher['headshot_url']
 
-# Define GitHub raw base URL
-base_url = "https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/"
-
-# Construct the raw headshot URL
-headshot_path = f"{base_url}{headshot_url}"
-
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
-if headshot_url != 'Not Found':  # Ensure the URL exists
-    st.image(headshot_path, width=200)
+if headshot_url != 'Not Found':
+    # Display the image from the GitHub raw URL
+    st.image(headshot_url, width=200)
 else:
     st.write(f"No headshot found for {pitcher_name}.")
+
+# Debugging: Show the image URL for verification
+st.write(f"Image URL: {headshot_url}")
 
 # User input for guessing
 with st.form(key=f"guess_form_{st.session_state.round_num}"):
