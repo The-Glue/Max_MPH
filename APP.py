@@ -75,6 +75,17 @@ pitcher_name = pitcher['player_name']
 actual_speed = pitcher['release_speed']
 headshot_url = pitcher['headshot_url']
 
+# Function to construct the full URL for the headshot
+def construct_headshot_url(file_path):
+    base_url = "https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/"
+    # Extract just the file name (last part of the path)
+    file_name = file_path.split('/')[-1]  # Get the part after the last slash
+    # Return the complete URL
+    return f"{base_url}{file_name}"
+
+# Construct the URL for the headshot
+headshot_url = construct_headshot_url(headshot_url)
+
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
 if headshot_url != 'Not Found':
