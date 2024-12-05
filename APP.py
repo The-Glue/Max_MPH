@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import random
+import os
 
 # Function to calculate points based on guess accuracy
 def calculate_points(guess, actual):
@@ -39,21 +40,6 @@ def reset_game():
     st.session_state.current_pitcher = None
     st.session_state.game_over = False
 
-# Function to construct the full URL for the headshot
-def construct_headshot_url(file_path):
-    base_url = "https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/"
-    # Ensure that the path uses forward slashes
-    file_path = file_path.replace("\\", "/")  # For Windows-style paths
-
-    # Check if the file_path contains 'headshots2' and construct the URL accordingly
-    if 'headshots2' in file_path:
-        # Correct URL path for 'headshots2' directory
-        return f"{base_url}{file_path}"
-    else:
-        # Default to using the 'headshots2' directory if not specified
-        file_name = file_path.split('/')[-1]  # Get the part after the last slash
-        return f"{base_url}headshots2/{file_name}"
-
 # Load data
 df_combined = load_data()
 
@@ -90,19 +76,19 @@ pitcher_name = pitcher['player_name']
 actual_speed = pitcher['release_speed']
 headshot_url = pitcher['headshot_url']
 
-# Construct the full headshot URL using the new function
-headshot_url = construct_headshot_url(headshot_url)
+# Determine the headshot folder based on player name (before or after Luis Frias alphabetically)
+if pitcher_name >= "Luis Frias":
+    headshot_folder = "headshot2"  # Players after or including Luis Frias
+else:
+    headshot_folder = "headshots"  # Players before Luis Frias
+
+# Construct the headshot URL correctly based on the folder and filename
+headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Make sure it's using forward slashes and get the correct filename
+headshot_url_final = f"https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/{headshot_folder}/{headshot_filename}"
 
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
-if headshot_url != 'Not Found':
-    # Display the image from the GitHub raw URL
-    st.image(headshot_url, width=200)
-else:
-    st.write(f"No headshot found for {pitcher_name}.")
-
-# Debugging: Show the image URL for verification
-st.write(f"Image URL: {headshot_url}")
+st.image(headshot_url_final, width=200)
 
 # User input for guessing
 with st.form(key=f"guess_form_{st.session_state.round_num}"):
@@ -144,6 +130,6 @@ if submit_button:
 
 # Display all feedback statements from previous rounds
 if st.session_state.feedback_statements:
-    st.subheader("Feedback So Far:")
+    st.subheader("Feedback So Far: ")
     for statement in st.session_state.feedback_statements:
         st.write(statement)
