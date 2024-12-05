@@ -45,14 +45,14 @@ def construct_headshot_url(file_path):
     # Ensure that the path uses forward slashes
     file_path = file_path.replace("\\", "/")  # For Windows-style paths
 
-    # Check if the file_path contains a subdirectory (e.g., "headshots" or "headshot2")
-    if 'headshots' in file_path or 'headshot2' in file_path:
-        # Return the complete URL, assuming the directory is already present in the path
+    # Check if the file_path contains 'headshots2' and construct the URL accordingly
+    if 'headshots2' in file_path:
+        # Correct URL path for 'headshots2' directory
         return f"{base_url}{file_path}"
     else:
-        # If no directory is specified, return a default base URL with the file name
+        # Default to using the 'headshots2' directory if not specified
         file_name = file_path.split('/')[-1]  # Get the part after the last slash
-        return f"{base_url}headshots/{file_name}"
+        return f"{base_url}headshots2/{file_name}"
 
 # Load data
 df_combined = load_data()
