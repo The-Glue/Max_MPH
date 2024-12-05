@@ -86,6 +86,9 @@ else:
 headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Make sure it's using forward slashes and get the correct filename
 headshot_url_final = f"https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/{headshot_folder}/{headshot_filename}"
 
+# Debugging: Show the constructed URL
+st.write(f"Constructed Headshot URL: {headshot_url_final}")
+
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
 st.image(headshot_url_final, width=200)
