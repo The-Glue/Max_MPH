@@ -76,14 +76,18 @@ pitcher_name = pitcher['player_name']
 actual_speed = pitcher['release_speed']
 headshot_url = pitcher['headshot_url']
 
+# Normalize pitcher name by stripping spaces and converting to lowercase
+normalized_name = pitcher_name.strip().lower()  # Normalize player name
+comparison_name = "Luis Frias".strip().lower()  # Normalize comparison name
+
 # Determine the headshot folder based on player name (before or after Luis Frias alphabetically)
-if pitcher_name >= "Luis Frias":
-    headshot_folder = "headshot2"  # Players after or including Luis Frias
+if normalized_name >= comparison_name:
+    headshot_folder = "headshots2"  # Players after or including Luis Frias
 else:
     headshot_folder = "headshots"  # Players before Luis Frias
 
 # Construct the headshot URL correctly based on the folder and filename
-headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Make sure it's using forward slashes and get the correct filename
+headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Ensure forward slashes and get the filename
 headshot_url_final = f"https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/{headshot_folder}/{headshot_filename}"
 
 # Debugging: Show the constructed URL
@@ -94,7 +98,7 @@ st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_n
 st.image(headshot_url_final, width=200)
 
 # User input for guessing
-with st.form(key=f"guess_form_{st.session_state.round_num}"):
+with st.form(key=f"guess_form_{st.session_state.round_num}") :
     user_guess = st.text_input("Guess the fastest pitch speed (e.g., '95.3')", key=f"guess_input_{st.session_state.round_num}")
     submit_button = st.form_submit_button("Submit Guess")
 
