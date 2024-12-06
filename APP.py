@@ -56,14 +56,10 @@ rounds = 10  # Total number of rounds in the game
 
 # Function to determine the correct headshot folder based on the full name
 def get_headshot_folder(pitcher_name):
-    # Debugging: Show the name and comparison result
     first_last_name = pitcher_name.split(",")  # Split the name at the comma (Last, First)
     
     # Construct the full name as 'First Last'
     full_name = f"{first_last_name[1].strip()} {first_last_name[0].strip()}"
-    
-    # Debugging: Show the comparison
-    st.write(f"Comparing: {full_name} >= Luis Frias => {full_name >= 'Luis Frias'}")
     
     # Check if the full name is greater than or equal to "Luis Frias" lexicographically
     if full_name >= "Luis Frias":
@@ -99,9 +95,6 @@ headshot_folder = get_headshot_folder(pitcher_name)
 # Construct the headshot URL correctly based on the folder and filename
 headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Ensure the correct filename format
 headshot_url_final = f"https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/{headshot_folder}/{headshot_filename}"
-
-# Debugging: Show the constructed URL
-st.write(f"Constructed Headshot URL: {headshot_url_final}")
 
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
