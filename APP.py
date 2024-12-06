@@ -54,16 +54,19 @@ if "total_points" not in st.session_state:
 
 rounds = 10  # Total number of rounds in the game
 
-# Function to determine the correct headshot folder
+# Function to determine the correct headshot folder based on the full name
 def get_headshot_folder(pitcher_name):
-    # Define the cutoff name for folder assignment
-    cutoff_name = "Luis Frias"
+    # Debugging: Show the name and comparison result
+    first_last_name = pitcher_name.split(",")  # Split the name at the comma (Last, First)
     
-    # Debugging: Print the pitcher name and the comparison result
-    st.write(f"Comparing: {pitcher_name} >= {cutoff_name} => {pitcher_name >= cutoff_name}")
+    # Construct the full name as 'First Last'
+    full_name = f"{first_last_name[1].strip()} {first_last_name[0].strip()}"
     
-    # Check if the pitcher name is greater than or equal to "Luis Frias" alphabetically
-    if pitcher_name >= cutoff_name:
+    # Debugging: Show the comparison
+    st.write(f"Comparing: {full_name} >= Luis Frias => {full_name >= 'Luis Frias'}")
+    
+    # Check if the full name is greater than or equal to "Luis Frias" lexicographically
+    if full_name >= "Luis Frias":
         return "headshots2"
     else:
         return "headshots"
