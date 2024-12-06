@@ -40,10 +40,6 @@ def reset_game():
     st.session_state.current_pitcher = None
     st.session_state.game_over = False
 
-# Normalize pitcher name by stripping spaces, removing extra characters, and converting to lowercase
-def normalize_name(name):
-    return name.strip().lower()
-
 # Load data
 df_combined = load_data()
 
@@ -57,6 +53,20 @@ if "total_points" not in st.session_state:
     st.session_state.game_over = False
 
 rounds = 10  # Total number of rounds in the game
+
+# Function to determine the correct headshot folder
+def get_headshot_folder(pitcher_name):
+    # Define the cutoff name for folder assignment
+    cutoff_name = "Luis Frias"
+    
+    # Debugging: Print the pitcher name and the comparison result
+    st.write(f"Comparing: {pitcher_name} >= {cutoff_name} => {pitcher_name >= cutoff_name}")
+    
+    # Check if the pitcher name is greater than or equal to "Luis Frias" alphabetically
+    if pitcher_name >= cutoff_name:
+        return "headshots2"
+    else:
+        return "headshots"
 
 # Main game logic
 if st.session_state.round_num > rounds or st.session_state.game_over:
@@ -80,18 +90,11 @@ pitcher_name = pitcher['player_name']
 actual_speed = pitcher['release_speed']
 headshot_url = pitcher['headshot_url']
 
-# Normalize player name and the comparison name ("Luis Frias")
-normalized_name = normalize_name(pitcher_name)
-comparison_name = normalize_name("Luis Frias")
-
-# Determine the headshot folder based on player name (before or after Luis Frias alphabetically)
-if normalized_name >= comparison_name:
-    headshot_folder = "headshots2"  # Players after or including Luis Frias
-else:
-    headshot_folder = "headshots"  # Players before Luis Frias
+# Use the get_headshot_folder function to determine the folder
+headshot_folder = get_headshot_folder(pitcher_name)
 
 # Construct the headshot URL correctly based on the folder and filename
-headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Ensure forward slashes and get the filename
+headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Ensure the correct filename format
 headshot_url_final = f"https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/{headshot_folder}/{headshot_filename}"
 
 # Debugging: Show the constructed URL
