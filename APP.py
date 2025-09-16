@@ -94,7 +94,7 @@ headshot_folder = get_headshot_folder(pitcher_name)
 
 # Construct the headshot URL correctly based on the folder and filename
 headshot_filename = headshot_url.replace("\\", "/").split('/')[-1]  # Ensure the correct filename format
-headshot_url_final = f"https://raw.githubusercontent.com/The-Glue/PitchGuesser/main/{headshot_folder}/{headshot_filename}"
+headshot_url_final = f"https://raw.githubusercontent.com/The-Glue/Max_MPH/main/{headshot_folder}/{headshot_filename}"
 
 # Display the pitcher's name and headshot
 st.subheader(f"Round {st.session_state.round_num}/{rounds} - Pitcher: {pitcher_name}")
