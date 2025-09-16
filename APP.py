@@ -19,7 +19,7 @@ def calculate_points(guess, actual):
 # Load the data with caching
 @st.cache_data
 def load_data():
-    return pd.read_csv('finally_with_headshots.csv')
+    return pd.read_csv('2024_Max_MPH.csv')
 
 # Function to select a new pitcher
 def select_new_pitcher():
