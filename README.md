@@ -1,50 +1,55 @@
-# ⚾️ 2025 MLB Home Run Database & X/30 Guessing Game
+# ⚾️ Max Velocity Leaderboard & PitchGuesser Game
 
-This repository contains a complete database of **every home run hit** during the 2025 MLB regular season, including video files and the crucial **X/30 metric** (the number of MLB ballparks the HR would have cleared).
+This repository addresses a gap in available Statcast data by compiling a **Max Velocity Leaderboard** for every MLB pitcher in the 2024 and 2025 seasons.
 
-The data was built using **Baseball Savant** searches, the official **MLB Stats API**, and web scraping with **BeautifulSoup**.
+While Statcast easily highlights a hitter's hardest-hit ball (the 'red/blue bubbles' we frequently see), finding a pitcher's max pitch velocity required building a custom database.
 
-A **Streamlit** application is included for an interactive **X/30 Guessing Game**. The code is written in Python and executed primarily via Jupyter Notebooks.
+The leaderboard was constructed via a combination of Baseball Savant searches and calls to the **MLB Stats API**, initially creating a database of every fastball-type pitch thrown in those seasons, then filtering it down to each pitcher's single fastest pitch.
 
-**Goal:** This project is intended to serve as a working example for leveraging the MLB Stats API and web scraping techniques in future personal data projects.
+### 🎮 The PitchGuesser Game
 
----
+An accompanying **Streamlit** application allows users to guess the Max MPH for 10 randomly selected 2024 pitchers.
 
-## ⚙️ Data Pipeline: From Savant to Database
+* **Play the Game:** [HERE (Link to your Streamlit App)]
+* **Contact:** Let me know your high score and any feedback on Twitter **[@BarrisHax]**.
 
-The construction of this database was a three-step process designed to resolve the key identifiers needed for scraping.
-
-### Step 1: Initializing the Home Run List
-
-The initial list of home runs was compiled by creating daily **Baseball Savant** searches and scraping the results.
-
-* A loop was executed for every day of the regular season, resulting in the master list (see the `building_database` notebook).
-* **Note:** Initial data required several cleanup lines to handle wonky table scrapes (extra rows/gaps) before moving to API calls. This was a necessary step given the decision to start the project by leveraging Savant searches rather than the MLB API's event feed.
-
-### Step 2: Adding Game and Play IDs (The Crux of the Project)
-
-To get the essential `playID` for video access, we first needed the `gamePK` (Game ID) for each event.
-
-* **Finding `gamePK`:** Following the [MLB Stats API documentation](https://github.com/MajorLeagueBaseball/google-cloud-mlb-hackathon/blob/main/README.md), the 2025 season schedule (downloaded as JSON and converted to a CSV, which is included in this repository) was utilized. Home runs were matched against the schedule by date and teams to add the `gamePK` to the database (`adding_gamePks` notebook).
-* **Finding `playID`:** With the `gamePK`, we accessed the full game object for each event via the API endpoint: `https://statsapi.mlb.com/api/v1.1/game/{gamePK}/feed/live`. Code was then run to match player names and event metrics to retrieve the unique `playID` for each home run (`adding_playIDs` notebook).
-
-> **Why we need this:** The `playID` is the critical piece of data that allows us to access the specific Baseball Savant video page and scrape the X/30 metric: `https://baseballsavant.mlb.com/sporty-videos?playId={playID}`.
-
-### Step 3: Scraping X/30 and Video Downloads
-
-Using the final `playID` for each home run, two separate code loops utilized the `BeautifulSoup` library:
-
-1.  Scrape the **X/30 metric** from the corresponding Baseball Savant video page (`adding_x30` notebook).
-2.  Download the **video file** for local use (`downloading_videos` notebook).
+All code is written in Python and performed in Jupyter Notebooks.
 
 ---
 
-## 🎮 The X/30 Guessing Game (Streamlit App)
+## ⚙️ Data Pipeline: From Scratch to API
 
-The final product is a **Streamlit** application that presents the user with 10 randomly selected home run videos and prompts them to guess the X/30 number before revealing the answer.
+This project showcases the evolution of data sourcing between the 2024 and 2025 seasons, highlighting the power of the MLB Stats API.
 
-* **App Status:** The Streamlit code is based heavily on a previous project ("PitchGuesser"), adapted here for video display and the X/30 mechanic.
-* **Current Limitation:** A cloud-hosted version is not yet available due to the storage and bandwidth challenge of serving thousands of video files.
-* **Demo:** A local demo of the game is available for viewing **[HERE (Link to Demo Video/GIF)]**.
+### 2024 Database Creation: The Hard Way
 
-Stay tuned for updates as a scalable video storage solution is developed!
+In 2024, the MLB Stats API hackathon documentation was not yet available to me, requiring a painstaking manual process:
+
+* I manually stitched together the outputs of **30 different Baseball Savant searches**.
+* Each search targeted every fastball, sinker, or cutter thrown by a *single team* during the entire regular season.
+* The final result was a complete database of every fastball-type pitch thrown during the 2024 season.
+
+### 2025 Database Creation: The Elegant Way
+
+Armed with the knowledge of the official MLB Stats API, the process for 2025 was far more efficient:
+
+* The API allowed elegant access to every play event of every game during the regular season.
+* Any event labeled with a fastball pitch type was added to the database, leaving us with a comprehensive list of every fastball thrown during the 2025 season.
+
+### Building the Final Leaderboard
+
+For both years, a simple, quick block of Python code was run on the complete database to perform a group-by and filter, isolating each individual pitcher's fastest pitch.
+
+* This process yielded the final **Max MPH Leaderboard** for both the 2024 and 2025 seasons.
+* The final leaderboard CSV files are provided in this repository.
+* *Note: The entire database of fastballs was too large to upload to GitHub.*
+
+---
+
+## 📸 Headshots and The Streamlit App
+
+### Pitcher Headshots
+
+Gathering headshots for the game was initially a manual and time-consuming process.
+
+Moving forward, the MLB Stats API provides a reliable and scalable solution for obtaining player images:
